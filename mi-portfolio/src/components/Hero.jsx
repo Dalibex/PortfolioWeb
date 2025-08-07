@@ -13,7 +13,7 @@ const Hero = () => {
   };
 
   return (
-    <section className="min-h-[85vh] bg-black flex items-center justify-center relative px-6 md:px-20 overflow-hidden">
+    <section id="inicio" className="min-h-[100vh] bg-black flex items-center justify-center relative px-6 md:px-20 overflow-visible">
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
@@ -30,19 +30,35 @@ const Hero = () => {
 
           <div className="flex gap-6">
             <button
-              onClick={(e) => scrollToSection(e, "#sobremi")}
-              className="px-6 py-3 bg-white text-black font-semibold rounded hover:bg-gray-200 transition"
+              onClick={(e) => scrollToSection(e, "#infosection")}
+              className="px-6 py-3 border border-white text-white font-semibold rounded hover:bg-white hover:text-black transition"
             >
               Know More
             </button>
-
-            <button
-              onClick={(e) => scrollToSection(e, "#github")}
-              className="px-6 py-3 border border-white text-white font-semibold rounded hover:bg-white hover:text-black transition"
-            >
-              Github
-            </button>
           </div>
+
+          <motion.div
+            animate={{ y: [0, -10, 0] }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            className="absolute top-120 right-240 transform -translate-x-1/2 cursor-pointer z-30"
+            onClick={(e) => scrollToSection(e, "#infosection")}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-8 h-8 text-white"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </motion.div>
+
         </div>
       </motion.div>
       <motion.div
