@@ -55,12 +55,12 @@ const Footer = () => {
           >
             <div className="relative group">
               <img
-                src={LinkedIn}
-                alt="LinkedIn-Icon"
+                src={YT}
+                alt="YouTube-Icon"
                 className="w-10 h-10 -mt-1 transition-transform duration-300 transform group-hover:scale-80"
               />
               <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
-                LinkedIn
+                Youtube
               </span>
             </div>
           </a>
@@ -73,12 +73,12 @@ const Footer = () => {
           >
             <div className="relative group">
               <img
-                src={YT}
-                alt="YouTube-Icon"
+                src={LinkedIn}
+                alt="LinkedIn-Icon"
                 className="w-10 h-10 -mt-1 transition-transform duration-300 transform group-hover:scale-80"
               />
               <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
-                Youtube
+                LinkedIn
               </span>
             </div>
           </a>

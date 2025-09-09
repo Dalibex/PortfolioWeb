@@ -25,7 +25,7 @@ const Hero = () => {
             Welcome! I'm Daniel Linares Bernal
           </h1>
           <p className="text-lg text-gray-300">
-            Programmer | I love modding and software development in general
+            Software engineer who also loves modding and game development
           </p>
 
           <div className="flex gap-6">
