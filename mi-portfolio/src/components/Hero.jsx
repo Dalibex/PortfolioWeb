@@ -1,83 +1,148 @@
-import { motion } from "framer-motion";
-import miFoto from "/src/assets/vegettabetter.png";
-import { useLenis } from "../context/LenisContext";
+import { useEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
+import { useLanguage } from '../context/LanguageContext';
+import { useTheme } from '../context/ThemeContext';
+import { ArrowDown } from 'lucide-react';
 
-const Hero = () => {
-  const lenis = useLenis();
+const Hero = ({ isAppLoading }) => {
+    const canvasRef = useRef(null);
+    const { t } = useLanguage();
+    const { theme } = useTheme();
+    const textRef = useRef(null);
+    const buttonRef = useRef(null);
 
-  const scrollToSection = (e, id) => {
-    e.preventDefault();
-    if (lenis) {
-      lenis.scrollTo(id);
-    }
-  };
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext('2d');
+        let animationFrameId;
 
-  return (
-    <section id="inicio" className="min-h-[100vh] bg-black flex items-center justify-center relative px-6 md:px-20 overflow-visible">
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 2, ease: "easeInOut" }}
-        className="flex flex-col md:flex-row items-center md:items-start gap-12 max-w-6xl w-full relative z-20"
-      >
-        <div className="text-center md:text-left flex flex-col gap-6 flex-1">
-          <h1 className="text-5xl text-white font-bold">
-            Welcome! I'm Daniel Linares Bernal
-          </h1>
-          <p className="text-lg text-gray-300">
-            Software engineer who also loves modding and game development
-          </p>
+        const resizeCanvas = () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        };
 
-          <div className="flex gap-6">
-            <button
-              onClick={(e) => scrollToSection(e, "#infosection")}
-              className="px-6 py-3 border border-white text-white font-semibold rounded hover:bg-white hover:text-black transition"
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const particles = [];
+        const particleCount = 100;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.speedX = (Math.random() - 0.5) * 0.5;
+                this.speedY = (Math.random() - 0.5) * 0.5;
+                this.opacity = Math.random() * 0.5 + 0.2;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+            }
+
+            draw() {
+                ctx.fillStyle = theme.name === 'light' ? `rgba(100, 100, 100, ${this.opacity})` : `rgba(200, 200, 255, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        const animate = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            animationFrameId = requestAnimationFrame(animate);
+        };
+
+        animate();
+
+        // ONLY play text animations once the preloader is done
+        if (!isAppLoading && textRef.current) {
+            gsap.fromTo(textRef.current.children, 
+                { opacity: 0, y: 30 },
+                { opacity: 1, y: 0, duration: 1, stagger: 0.2, ease: "power3.out", clearProps: "all" }
+            );
+
+            gsap.fromTo(buttonRef.current,
+                { opacity: 0, scale: 0.8 },
+                { opacity: 1, scale: 1, duration: 1, delay: 1, ease: "back.out(1.7)", clearProps: "all" }
+            );
+        }
+
+        return () => {
+            window.removeEventListener('resize', resizeCanvas);
+            cancelAnimationFrame(animationFrameId);
+        };
+    }, [theme.name, isAppLoading]);
+
+    const scrollToAbout = () => {
+        const aboutSection = document.querySelector('#about');
+        if (aboutSection) {
+            aboutSection.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
+    return (
+        <section id="hero" className={`relative h-screen w-full flex items-center justify-center overflow-hidden ${theme.bg} transition-colors duration-500`}>
+            <canvas
+                ref={canvasRef}
+                className="absolute inset-0 pointer-events-none opacity-40"
+            />
+            
+            <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
+                <div ref={textRef} className="space-y-4">
+                    <p className={`text-xl md:text-2xl font-medium ${theme.accent} tracking-wide uppercase`}>
+                        {t('heroGreeting')}
+                    </p>
+                    <h1 className={`text-5xl md:text-7xl font-bold ${theme.text} leading-tight tracking-tight`}>
+                        {t('heroName')}
+                    </h1>
+                    <p className={`text-2xl md:text-3xl font-semibold bg-gradient-to-r ${theme.gradientAccent} bg-clip-text text-transparent`}>
+                        {t('heroRole')}
+                    </p>
+                    <p className={`max-w-2xl mx-auto text-lg md:text-xl ${theme.textSecondary} mt-6 leading-relaxed`}>
+                        {t('heroDescription')}
+                    </p>
+                </div>
+
+                <div ref={buttonRef} className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <button
+                        onClick={scrollToAbout}
+                        className={`px-8 py-4 bg-gradient-to-r ${theme.gradientAccent} text-white font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95`}
+                    >
+                        {t('heroCta')}
+                    </button>
+                    <a
+                        href="#contact"
+                        className={`px-8 py-4 border-2 ${theme.border} ${theme.text} font-bold rounded-lg hover:bg-white hover:bg-opacity-10 transition-all duration-300`}
+                    >
+                        {t('heroContact')}
+                    </a>
+                </div>
+            </div>
+
+            <div 
+                className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce cursor-pointer"
+                onClick={scrollToAbout}
             >
-              Know More
-            </button>
-          </div>
-
-          <motion.div
-            animate={{ y: [0, -10, 0] }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-            className="absolute top-120 right-240 transform -translate-x-1/2 cursor-pointer z-30"
-            onClick={(e) => scrollToSection(e, "#infosection")}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-8 h-8 text-white"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-            </svg>
-          </motion.div>
-
-        </div>
-      </motion.div>
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 2, ease: "easeInOut" }}
-        aria-hidden="true"
-        className="absolute top-0 right-0 bottom-0 w-1/2 opacity-80 pointer-events-none select-none"
-        style={{
-          backgroundImage: `url(${miFoto})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          filter: "grayscale(30%)",
-          zIndex: 10,
-        }}
-      />
-    </section>
-  );
+                <ArrowDown className={`w-8 h-8 ${theme.textMuted}`} />
+            </div>
+        </section>
+    );
 };
 
 export default Hero;

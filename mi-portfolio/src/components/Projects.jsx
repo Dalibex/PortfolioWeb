@@ -1,147 +1,159 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
-import { Github, ExternalLink } from 'lucide-react';
+import { ExternalLink, Github, Code2, Gamepad2, Cpu, Check, Server } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
+import { useTheme } from '../context/ThemeContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const Projects = () => {
-  const containerRef = useRef(null);
-  const projectsRef = useRef([]);
+const Projects = ({ isAppLoading }) => {
+    const { t } = useLanguage();
+    const { theme } = useTheme();
+    const sectionRef = useRef(null);
 
-  const projects = [
-    {
-      id: 1,
-      title: "Multiplayer Plugin – Java Backend",
-      description: "Plugin de servidor multijugador en producción con usuarios reales. Implementé arquitectura orientada a eventos, testing automatizado con bots y optimización de rendimiento basada en feedback de usuarios.",
-      technologies: ["Java", "Server APIs", "Event-Driven Architecture", "JUnit Testing", "Performance Optimization"],
-      highlights: ["Usuarios en producción", "Testing con bots", "Optimización de performance", "Soporte continuo"],
-      githubUrl: "https://github.com/dalibex",
-      color: "from-blue-500/20 to-cyan-500/20",
-      borderColor: "border-blue-500/30"
-    },
-    {
-      id: 2,
-      title: "Malackathon II - UMA",
-      description: "Solución para profesionales de salud mental desarrollada en hackathon universitario. Integré análisis de datos, visualización, APIs de IA y desarrollo de chatbot con prototipado rápido en equipo.",
-      technologies: ["Data Analysis", "Data Visualization", "AI APIs", "Chatbot Development", "Rapid Prototyping"],
-      highlights: ["Hackathon universitario", "Solución real para profesionales", "Integración IA", "Trabajo en equipo"],
-      githubUrl: "https://github.com/dalibex",
-      color: "from-purple-500/20 to-pink-500/20",
-      borderColor: "border-purple-500/30"
-    },
-    {
-      id: 3,
-      title: "MalagaCrea 2026 - Game Development",
-      description: "Videojuego desarrollado para programa de juventud de Málaga. Diseñé mecánicas interactivas, arquitectura de software limpia, UI intuitiva y gestión de versiones con Git en equipo.",
-      technologies: ["Unity", "C#", "Game Design", "Interactive Systems", "UI Development", "Git/Version Control"],
-      highlights: ["Programa oficial de juventud", "Diseño de gameplay", "Arquitectura escalable", "Control de versiones"],
-      githubUrl: "https://github.com/dalibex",
-      color: "from-orange-500/20 to-red-500/20",
-      borderColor: "border-orange-500/30"
-    },
-    {
-      id: 4,
-      title: "Discord Bot - Open Source",
-      description: "Bot de Discord con integración de IA generativa. Arquitectura modular, integración con LLM Gemma 3 27B, manejo de comandos robusto y APIs REST para extensibilidad.",
-      technologies: ["Python", "Discord API", "LLM Integration (Gemma 3 27B)", "Modular Architecture", "REST APIs"],
-      highlights: ["Open source", "IA generativa", "Arquitectura modular", "Fácil de extender"],
-      githubUrl: "https://github.com/dalibex",
-      color: "from-green-500/20 to-emerald-500/20",
-      borderColor: "border-green-500/30"
-    }
-  ];
-
-  useEffect(() => {
-    projectsRef.current.forEach((el, index) => {
-      if (!el) return;
-      gsap.fromTo(
-        el,
-        { y: 50, opacity: 0 },
+    const projects = [
         {
-          y: 0,
-          opacity: 1,
-          duration: 0.8,
-          delay: index * 0.15,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: el,
-            start: 'top 85%',
-            toggleActions: 'play none none none',
-          },
+            id: 2,
+            title: t('project2Title'),
+            description: t('project2Desc'),
+            tags: ["REST API", "Node.js", "Hackathon"],
+            icon: <Cpu className="w-10 h-10" />,
+            github: "https://github.com/dalibex",
+            highlights: t('project2Highlights'),
+            color: "from-emerald-600/20 to-teal-600/20"
+        },
+        {
+            id: 3,
+            title: t('project3Title'),
+            description: t('project3Desc'),
+            tags: ["Unity", "C#", "Game Design"],
+            icon: <Gamepad2 className="w-10 h-10" />,
+            github: "https://github.com/dalibex",
+            highlights: t('project3Highlights'),
+            color: "from-purple-600/20 to-pink-600/20"
+        },
+        {
+            id: 4,
+            title: t('project4Title'),
+            description: t('project4Desc'),
+            tags: ["Node.js", "GenAI", "Modular"],
+            icon: <Code2 className="w-10 h-10" />,
+            github: "https://github.com/dalibex",
+            highlights: t('project4Highlights'),
+            color: "from-red-600/20 to-orange-600/20"
         }
-      );
-    });
-  }, []);
+    ];
 
-  return (
-    <section className="min-h-screen bg-gray-950 text-white px-4 py-20">
-      <div className="max-w-5xl mx-auto">
-        <div className="mb-16">
-          <h2 className="text-5xl font-bold mb-4 bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
-            Projects
-          </h2>
-          <p className="text-gray-400 text-lg">
-            Proyectos destacados que demuestran mis habilidades en desarrollo backend, frontend y game development
-          </p>
-        </div>
+    useEffect(() => {
+        // ONLY initialize animations once the app is done loading
+        if (isAppLoading) return;
 
-        <div className="grid gap-6">
-          {projects.map((project, index) => (
-            <div
-              key={project.id}
-              ref={(el) => (projectsRef.current[index] = el)}
-              className={`bg-gradient-to-br ${project.color} backdrop-blur-sm border ${project.borderColor} rounded-xl p-6 hover:border-cyan-400/50 transition-all duration-300 group`}
-            >
-              <div className="flex flex-col gap-4">
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex-1">
-                    <h3 className="text-2xl font-bold text-white group-hover:text-cyan-400 transition-colors">
-                      {project.title}
-                    </h3>
-                  </div>
-                  <a
-                    href={project.githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-2 hover:bg-white/10 rounded-lg transition-colors"
-                  >
-                    <Github className="w-5 h-5 text-gray-400 group-hover:text-cyan-400" />
-                  </a>
+        const ctx = gsap.context(() => {
+            const cards = gsap.utils.toArray(".project-card");
+            if (cards.length === 0) return;
+
+            gsap.from(cards, {
+                scrollTrigger: {
+                    trigger: ".projects-grid",
+                    start: "top 95%",
+                    once: true,
+                    onRefresh: () => {
+                        // Ensure visibility if something went wrong
+                        gsap.set(cards, { opacity: 1, y: 0 });
+                    }
+                },
+                y: 40,
+                opacity: 0,
+                duration: 0.8,
+                stagger: 0.15,
+                ease: "power3.out",
+                clearProps: "all"
+            });
+        }, sectionRef);
+
+        return () => ctx.revert();
+    }, [theme.name, isAppLoading]);
+
+    return (
+        <section 
+            id="projects" 
+            ref={sectionRef}
+            className={`min-h-screen ${theme.bg} ${theme.text} px-4 py-24 transition-colors duration-500`}
+        >
+            <div className="max-w-6xl mx-auto">
+                <div className="text-center mb-20">
+                    <h2 className={`text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r ${theme.gradientAccent} bg-clip-text text-transparent inline-block pb-2 px-1 break-normal`}>
+                        {t('projectsTitle')}
+                    </h2>
+                    <p className={`${theme.textSecondary} text-lg max-w-2xl mx-auto break-words whitespace-normal`}>
+                        {t('projectsSubtitle')}
+                    </p>
                 </div>
 
-                <p className="text-gray-300 leading-relaxed">
-                  {project.description}
-                </p>
+                <div className="projects-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {projects.map((project) => (
+                        <div
+                            key={project.id}
+                            className={`project-card group relative p-8 rounded-[2.5rem] bg-gradient-to-br ${theme.gradientCard} border ${theme.borderCard} ${theme.hoverBorder} transition-all duration-500 flex flex-col justify-between h-full hover:shadow-2xl hover:shadow-indigo-500/10 shadow-xl overflow-hidden`}
+                            style={{ opacity: 1 }} // Fallback visibility
+                        >
+                            <div className={`absolute -right-10 -top-10 w-40 h-40 bg-gradient-to-br ${project.color} blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700`}></div>
 
-                <div className="flex flex-wrap gap-2">
-                  {project.technologies.map((tech, i) => (
-                    <span
-                      key={i}
-                      className="px-3 py-1 bg-gray-800/50 text-cyan-400 text-sm rounded-full border border-cyan-500/30"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
+                            <div className="relative z-10">
+                                <div className="flex items-center justify-between mb-8">
+                                    <div className={`p-4 rounded-2xl bg-white/10 ${theme.accent} group-hover:scale-110 transition-transform duration-500 shadow-xl`}>
+                                        {project.icon}
+                                    </div>
+                                    <div className="flex gap-3">
+                                        {project.github && (
+                                            <a 
+                                                href={project.github} 
+                                                target="_blank" 
+                                                rel="noopener noreferrer" 
+                                                className={`p-2.5 rounded-xl ${theme.bgCard} ${theme.textSecondary} hover:${theme.text} hover:${theme.accentBg} transition-all duration-300 border ${theme.borderCard}`}
+                                                title="View Code"
+                                            >
+                                                <Github className="w-5 h-5" />
+                                            </a>
+                                        )}
+                                    </div>
+                                </div>
 
-                <div className="pt-2 flex flex-wrap gap-2">
-                  {project.highlights.map((highlight, i) => (
-                    <span
-                      key={i}
-                      className="text-sm text-gray-400 flex items-center gap-1"
-                    >
-                      ✓ {highlight}
-                    </span>
-                  ))}
+                                <h3 className={`text-xl md:text-2xl font-bold mb-3 group-hover:${theme.accent} transition-colors duration-300 break-normal`}>
+                                    {project.title}
+                                </h3>
+                                
+                                <p className={`${theme.textSecondary} mb-6 leading-relaxed text-sm md:text-base break-words whitespace-normal`}>
+                                    {project.description}
+                                </p>
+
+                                <div className="space-y-3 mb-8">
+                                    {Array.isArray(project.highlights) && project.highlights.map((highlight, idx) => (
+                                        <div key={idx} className="flex items-start gap-2">
+                                            <Check className={`w-4 h-4 ${theme.accent} mt-0.5 shrink-0`} />
+                                            <span className={`${theme.textSecondary} text-xs md:text-sm font-medium break-words`}>{highlight}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className={`flex flex-wrap gap-2 pt-6 border-t ${theme.border} relative z-10`}>
+                                {project.tags.map((tag, idx) => (
+                                    <span
+                                        key={idx}
+                                        className={`px-3 py-1 text-[10px] md:text-xs font-bold rounded-full ${theme.bgCard} ${theme.accent} border ${theme.accentBorder} shadow-sm whitespace-nowrap`}
+                                    >
+                                        {tag}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    ))}
                 </div>
-              </div>
             </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
+        </section>
+    );
 };
 
 export default Projects;

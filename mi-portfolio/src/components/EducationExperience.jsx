@@ -1,157 +1,126 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
-import { GraduationCap, Briefcase, Calendar } from 'lucide-react';
+import { Briefcase, GraduationCap, MapPin, Check } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
+import { useTheme } from '../context/ThemeContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const EducationExperience = () => {
-    const containerRef = useRef(null);
-    const itemsRef = useRef([]);
+const EducationExperience = ({ isAppLoading }) => {
+    const { t } = useLanguage();
+    const { theme } = useTheme();
+    const sectionRef = useRef(null);
 
-    const education = [
+    const items = [
         {
-            degree: "Bachelor's Degree in Software Engineering",
-            institution: "University of Malaga",
-            period: "2021 - Present (4th year)",
-            description: "Formación completa en ingeniería de software con énfasis en arquitectura limpia, patrones de diseño y buenas prácticas de desarrollo.",
-            relevantCourses: ["Software Architecture", "Database Design", "Web Development", "Game Development", "Data Structures"]
-        }
-    ];
-
-    const experience = [
-        {
-            title: "Multiplayer Plugin Development",
-            organization: "Real Users Production",
-            period: "Ongoing",
-            description: "Desarrollo y mantenimiento de plugins multiplayer para servidor en producción. Experiencia real con usuarios, debugging en entornos productivos, y optimización basada en feedback.",
-            achievements: ["Event-driven architecture", "Automated testing with bots", "Performance optimization", "User feedback integration"]
+            id: 1,
+            title: t('eduDegree'),
+            company: t('eduInstitution'),
+            period: t('eduPeriod'),
+            description: t('eduDescription'),
+            type: 'education',
+            icon: <GraduationCap className="w-6 h-6" />,
+            highlights: [t('eduCourses'), 'Software Architecture', 'Data Structures', 'Operating Systems']
         },
         {
-            title: "Malackathon II - Hackathon Participant",
-            organization: "University of Malaga",
-            period: "2024",
-            description: "Participación en hackathon universitario enfocado en soluciones digitales para profesionales de salud mental. Trabajo en equipo con prototipado rápido.",
-            achievements: ["Data analysis & visualization", "AI API integration", "Chatbot development", "Rapid prototyping"]
-        },
-        {
-            title: "Game Development - MalagaCrea 2026",
-            organization: "Program of Youth of Malaga",
-            period: "2024-2025",
-            description: "Desarrollo de videojuego para programa oficial de juventud de Málaga. Responsable de game design, arquitectura técnica y coordinar version control.",
-            achievements: ["Game design & mechanics", "Clean software architecture", "UI/UX development", "Team coordination"]
+            id: 2,
+            title: t('exp1Title'),
+            company: t('exp1Org'),
+            period: t('exp1Period'),
+            description: t('exp1Desc'),
+            type: 'work',
+            icon: <Briefcase className="w-6 h-6" />,
+            highlights: t('exp1Achievements')
         }
     ];
 
     useEffect(() => {
-        itemsRef.current.forEach((el, index) => {
-            if (!el) return;
-            gsap.fromTo(
-                el,
-                { x: -50, opacity: 0 },
-                {
-                    x: 0,
-                    opacity: 1,
-                    duration: 0.8,
-                    delay: index * 0.15,
-                    ease: 'power2.out',
-                    scrollTrigger: {
-                        trigger: el,
-                        start: 'top 80%',
-                        toggleActions: 'play none none none',
-                    },
-                }
-            );
-        });
-    }, []);
+        if (isAppLoading) return;
+
+        const ctx = gsap.context(() => {
+            gsap.from(".timeline-item", {
+                scrollTrigger: {
+                    trigger: ".timeline-container",
+                    start: "top 90%",
+                    once: true,
+                    onRefresh: () => {
+                        gsap.set(".timeline-item", { opacity: 1, x: 0 });
+                    }
+                },
+                x: -30,
+                opacity: 0,
+                duration: 0.8,
+                stagger: 0.2,
+                ease: "power2.out",
+                clearProps: "all"
+            });
+        }, sectionRef);
+
+        return () => ctx.revert();
+    }, [theme.name, isAppLoading]);
 
     return (
-        <section className="min-h-screen bg-gray-950 text-white px-4 py-20">
-            <div className="max-w-5xl mx-auto">
-                {/* Education Section */}
-                <div className="mb-20">
-                    <div className="mb-12 flex items-center gap-3">
-                        <GraduationCap className="w-8 h-8 text-cyan-400" />
-                        <h2 className="text-5xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
-                            Education
-                        </h2>
-                    </div>
-
-                    {education.map((edu, index) => (
-                        <div
-                            key={index}
-                            ref={(el) => (itemsRef.current[index] = el)}
-                            className="p-6 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border border-blue-500/30 rounded-xl hover:border-cyan-400/50 transition-all duration-300"
-                        >
-                            <div className="flex items-start justify-between gap-4 mb-3">
-                                <div>
-                                    <h3 className="text-2xl font-bold text-white">{edu.degree}</h3>
-                                    <p className="text-cyan-400 font-semibold">{edu.institution}</p>
-                                </div>
-                                <div className="flex items-center gap-2 text-gray-400 text-sm whitespace-nowrap">
-                                    <Calendar className="w-4 h-4" />
-                                    {edu.period}
-                                </div>
-                            </div>
-
-                            <p className="text-gray-300 mb-4">{edu.description}</p>
-
-                            <div>
-                                <p className="text-sm font-semibold text-gray-400 mb-2">Relevant Courses:</p>
-                                <div className="flex flex-wrap gap-2">
-                                    {edu.relevantCourses.map((course, i) => (
-                                        <span
-                                            key={i}
-                                            className="px-3 py-1 bg-gray-800/50 text-cyan-400 text-sm rounded-full border border-cyan-500/30"
-                                        >
-                                            {course}
-                                        </span>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                    ))}
+        <section 
+            id="experience" 
+            ref={sectionRef}
+            className={`min-h-screen ${theme.bg} ${theme.text} px-4 py-24 transition-colors duration-500`}
+        >
+            <div className="max-w-6xl mx-auto">
+                <div className="text-center mb-20">
+                    <h2 className={`text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r ${theme.gradientAccent} bg-clip-text text-transparent inline-block pb-2 px-1 break-normal`}>
+                        {t('educationTitle')} & {t('experienceTitle')}
+                    </h2>
+                    <p className={`${theme.textSecondary} text-lg break-words whitespace-normal`}>
+                        My academic background and professional journey
+                    </p>
                 </div>
 
-                {/* Experience Section */}
-                <div>
-                    <div className="mb-12 flex items-center gap-3">
-                        <Briefcase className="w-8 h-8 text-cyan-400" />
-                        <h2 className="text-5xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
-                            Experience
-                        </h2>
-                    </div>
+                <div className="timeline-container relative max-w-5xl mx-auto">
+                    {/* Vertical line */}
+                    <div className={`absolute left-0 md:left-1/2 transform md:-translate-x-1/2 top-0 bottom-0 w-1 bg-gradient-to-b ${theme.gradientAccent} opacity-20 rounded-full`}></div>
 
-                    <div className="space-y-6">
-                        {experience.map((exp, index) => (
-                            <div
-                                key={index}
-                                ref={(el) => (itemsRef.current[education.length + index] = el)}
-                                className="p-6 bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-purple-500/30 rounded-xl hover:border-cyan-400/50 transition-all duration-300"
+                    <div className="space-y-12 md:space-y-0">
+                        {items.map((item, index) => (
+                            <div 
+                                key={item.id} 
+                                className={`timeline-item relative flex flex-col md:flex-row items-center mb-12 md:mb-20 ${index % 2 !== 0 ? 'md:flex-row-reverse' : ''}`}
                             >
-                                <div className="flex items-start justify-between gap-4 mb-3">
-                                    <div>
-                                        <h3 className="text-2xl font-bold text-white">{exp.title}</h3>
-                                        <p className="text-cyan-400 font-semibold">{exp.organization}</p>
-                                    </div>
-                                    <div className="flex items-center gap-2 text-gray-400 text-sm whitespace-nowrap">
-                                        <Calendar className="w-4 h-4" />
-                                        {exp.period}
-                                    </div>
-                                </div>
+                                {/* Circle on timeline */}
+                                <div className={`absolute left-0 md:left-1/2 transform -translate-x-[7px] md:-translate-x-1/2 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-gradient-to-r ${theme.gradientAccent} shadow-[0_0_15px_rgba(129,140,248,0.5)] z-10`}></div>
 
-                                <p className="text-gray-300 mb-4">{exp.description}</p>
+                                <div className={`w-full md:w-1/2 ${index % 2 === 0 ? 'md:pr-16' : 'md:pl-16'} pl-10 md:pl-0`}>
+                                    <div className={`p-8 md:p-10 rounded-[2.5rem] bg-gradient-to-br ${theme.gradientCard} border ${theme.borderCard} hover:border-opacity-50 transition-all duration-300 shadow-xl relative group overflow-hidden`}>
+                                        <div className={`absolute -right-4 -top-4 w-32 h-32 bg-gradient-to-br from-white/5 to-transparent blur-3xl`}></div>
+                                        
+                                        <div className="flex items-center justify-between mb-6">
+                                            <div className={`${theme.accent} p-3 rounded-2xl bg-white/10 shadow-inner`}>
+                                                {item.icon}
+                                            </div>
+                                            <span className={`text-xs font-bold px-4 py-1.5 rounded-full ${theme.bgCard} ${theme.accent} border ${theme.accentBorder} shadow-sm`}>
+                                                {item.period}
+                                            </span>
+                                        </div>
 
-                                <div>
-                                    <p className="text-sm font-semibold text-gray-400 mb-2">Key Achievements:</p>
-                                    <ul className="space-y-2">
-                                        {exp.achievements.map((achievement, i) => (
-                                            <li key={i} className="flex items-start gap-3 text-gray-300">
-                                                <span className="text-cyan-400 font-bold mt-0.5">✓</span>
-                                                <span>{achievement}</span>
-                                            </li>
-                                        ))}
-                                    </ul>
+                                        <h3 className="text-2xl md:text-3xl font-bold mb-2 break-normal">{item.title}</h3>
+                                        <p className={`${theme.accent} font-semibold mb-6 flex items-center gap-2 break-normal text-lg`}>
+                                            <MapPin className="w-5 h-5" />
+                                            {item.company}
+                                        </p>
+                                        
+                                        <p className={`${theme.textSecondary} mb-8 leading-relaxed break-words whitespace-normal text-base`}>
+                                            {item.description}
+                                        </p>
+
+                                        <div className="space-y-4">
+                                            {Array.isArray(item.highlights) && item.highlights.map((highlight, idx) => (
+                                                <div key={idx} className="flex items-start gap-3">
+                                                    <Check className={`w-5 h-5 ${theme.accent} mt-1 shrink-0`} />
+                                                    <span className={`text-sm md:text-base ${theme.textSecondary} break-words font-medium`}>{highlight}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         ))}

@@ -1,1 +1,21 @@
 @import "tailwindcss";
+
+@layer base {
+  html, body {
+    background-color: #030712; /* Matches bg-gray-950 (Dark Theme) */
+    color: white;
+    margin: 0;
+    padding: 0;
+    scroll-behavior: auto !important; /* Managed by Lenis */
+  }
+
+  /* Hide scrollbar during preloader */
+  body.loading {
+    overflow: hidden;
+  }
+}
+
+/* Custom glow utility */
+.text-shadow-glow {
+  text-shadow: 0 0 15px currentColor;
+}

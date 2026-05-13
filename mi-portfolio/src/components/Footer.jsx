@@ -1,7 +1,11 @@
 import { Github, Linkedin, Twitter, Mail, Heart } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
+import { useTheme } from '../context/ThemeContext';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const { t } = useLanguage();
+  const { theme } = useTheme();
 
   const socialLinks = [
     {
@@ -31,38 +35,38 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-black border-t border-gray-800 text-gray-400 py-12 px-4">
+    <footer className={`${theme.footerBg} border-t ${theme.border} ${theme.textSecondary} py-12 px-4 transition-colors duration-500`}>
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           {/* Brand */}
           <div>
-            <h3 className="text-xl font-bold text-white mb-2">Daniel Linares</h3>
-            <p className="text-sm">Software Engineer & Developer</p>
-            <p className="text-sm text-gray-500 mt-2">📍 Malaga, Spain</p>
+            <h3 className={`text-xl font-bold ${theme.text} mb-2`}>Daniel Linares Bernal</h3>
+            <p className="text-sm">{t('footerRole')}</p>
+            <p className={`text-sm ${theme.textMuted} mt-2`}>📍 Malaga, Spain</p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h4 className="font-semibold text-white mb-4">Quick Links</h4>
+            <h4 className={`font-semibold ${theme.text} mb-4`}>{t('footerQuickLinks')}</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <a href="#about" className="hover:text-cyan-400 transition-colors">
-                  About
+                <a href="#about" className={`hover:${theme.accent} transition-colors`}>
+                  {t('navAbout')}
                 </a>
               </li>
               <li>
-                <a href="#projects" className="hover:text-cyan-400 transition-colors">
-                  Projects
+                <a href="#projects" className={`hover:${theme.accent} transition-colors`}>
+                  {t('navProjects')}
                 </a>
               </li>
               <li>
-                <a href="#skills" className="hover:text-cyan-400 transition-colors">
-                  Skills
+                <a href="#skills" className={`hover:${theme.accent} transition-colors`}>
+                  {t('navSkills')}
                 </a>
               </li>
               <li>
-                <a href="#contact" className="hover:text-cyan-400 transition-colors">
-                  Contact
+                <a href="#contact" className={`hover:${theme.accent} transition-colors`}>
+                  {t('navContact')}
                 </a>
               </li>
             </ul>
@@ -70,7 +74,7 @@ const Footer = () => {
 
           {/* Social Links */}
           <div>
-            <h4 className="font-semibold text-white mb-4">Connect</h4>
+            <h4 className={`font-semibold ${theme.text} mb-4`}>{t('footerConnect')}</h4>
             <div className="flex gap-4">
               {socialLinks.map((social, index) => {
                 const Icon = social.icon;
@@ -80,7 +84,7 @@ const Footer = () => {
                     href={social.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`p-2 bg-gray-900 rounded-lg text-gray-400 transition-all duration-300 ${social.color} hover:bg-gray-800`}
+                    className={`p-2 ${theme.bgCard} rounded-lg ${theme.textSecondary} transition-all duration-300 ${social.color} hover:bg-opacity-80`}
                     title={social.name}
                   >
                     <Icon className="w-5 h-5" />
@@ -92,22 +96,22 @@ const Footer = () => {
         </div>
 
         {/* Divider */}
-        <div className="border-t border-gray-800 pt-8">
+        <div className={`border-t ${theme.border} pt-8`}>
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm">
             <p className="flex items-center gap-2">
-              © {currentYear} Daniel Linares Bernal. All rights reserved.
+              © {currentYear} Daniel Linares Bernal. {t('footerRights')}
             </p>
-            <p className="flex items-center gap-2 text-gray-500">
-              Crafted with
+            <p className={`flex items-center gap-2 ${theme.textMuted}`}>
+              {t('footerCrafted')}
               <Heart className="w-4 h-4 text-red-500" />
-              using React, Tailwind & GSAP
+              {t('footerUsing')}
             </p>
           </div>
         </div>
 
         {/* Fun Quote */}
-        <div className="mt-8 p-4 bg-gray-900/50 border border-gray-800 rounded-lg text-center text-sm italic text-gray-500">
-          "Code is read much more often than it is written" - Guido van Rossum
+        <div className={`mt-8 p-4 ${theme.bgCard} border ${theme.borderCard} rounded-lg text-center text-sm italic ${theme.textMuted}`}>
+          {t('footerQuote')}
         </div>
       </div>
     </footer>
