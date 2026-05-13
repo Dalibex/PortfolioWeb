@@ -1,87 +1,113 @@
-import X from "/src/assets/x.png";
-import YT from "/src/assets/youtube-white-logo.svg";
-import GitHub from "/src/assets/github-white-logo.svg";
-import LinkedIn from "/src/assets/linkedin-white-logo.svg";
+import { Github, Linkedin, Twitter, Mail, Heart } from 'lucide-react';
 
 const Footer = () => {
-  return (
-    <footer className="bg-gray-900 text-white py-8 px-6 border-t border-gray-700">
-      <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-        <p className="text-sm text-gray-400">&copy; {new Date().getFullYear()} Daniel Linares Bernal. All rights reserved.</p>
+  const currentYear = new Date().getFullYear();
 
-        <div className="flex gap-6 text-gray-300">
-          <a
-            href="https://github.com/dalibex"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-white transition"
-            aria-label="GitHub"
-          >
-            <div className="relative group">
-              <img
-                src={GitHub}
-                alt="GitHub-Icon"
-                className="w-8 h-8 transition-transform duration-300 transform group-hover:scale-80"
-              />
-              <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
-                GitHub
-              </span>
+  const socialLinks = [
+    {
+      name: "GitHub",
+      icon: Github,
+      url: "https://github.com/dalibex",
+      color: "hover:text-gray-300"
+    },
+    {
+      name: "LinkedIn",
+      icon: Linkedin,
+      url: "https://www.linkedin.com/in/daniel-l-a349a52a8/",
+      color: "hover:text-blue-400"
+    },
+    {
+      name: "Twitter",
+      icon: Twitter,
+      url: "https://twitter.com/dalibex",
+      color: "hover:text-sky-400"
+    },
+    {
+      name: "Email",
+      icon: Mail,
+      url: "mailto:dalibe2003@gmail.com",
+      color: "hover:text-red-400"
+    }
+  ];
+
+  return (
+    <footer className="bg-black border-t border-gray-800 text-gray-400 py-12 px-4">
+      <div className="max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+          {/* Brand */}
+          <div>
+            <h3 className="text-xl font-bold text-white mb-2">Daniel Linares</h3>
+            <p className="text-sm">Software Engineer & Developer</p>
+            <p className="text-sm text-gray-500 mt-2">📍 Malaga, Spain</p>
+          </div>
+
+          {/* Quick Links */}
+          <div>
+            <h4 className="font-semibold text-white mb-4">Quick Links</h4>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <a href="#about" className="hover:text-cyan-400 transition-colors">
+                  About
+                </a>
+              </li>
+              <li>
+                <a href="#projects" className="hover:text-cyan-400 transition-colors">
+                  Projects
+                </a>
+              </li>
+              <li>
+                <a href="#skills" className="hover:text-cyan-400 transition-colors">
+                  Skills
+                </a>
+              </li>
+              <li>
+                <a href="#contact" className="hover:text-cyan-400 transition-colors">
+                  Contact
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Social Links */}
+          <div>
+            <h4 className="font-semibold text-white mb-4">Connect</h4>
+            <div className="flex gap-4">
+              {socialLinks.map((social, index) => {
+                const Icon = social.icon;
+                return (
+                  <a
+                    key={index}
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`p-2 bg-gray-900 rounded-lg text-gray-400 transition-all duration-300 ${social.color} hover:bg-gray-800`}
+                    title={social.name}
+                  >
+                    <Icon className="w-5 h-5" />
+                  </a>
+                );
+              })}
             </div>
-          </a>
-          <a
-            href="https://twitter.com/dalibex"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-white transition"
-            aria-label="Twitter"
-          >
-            <div className="relative group">
-              <img
-                src={X}
-                alt="Twitter-Icon"
-                className="w-8 h-8 transition-transform duration-300 transform group-hover:scale-80"
-              />
-              <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
-                Twitter
-              </span>
-            </div>
-          </a>
-          <a
-            href="https://youtube.com/@dalibex"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-white transition"
-            aria-label="YouTube"
-          >
-            <div className="relative group">
-              <img
-                src={YT}
-                alt="YouTube-Icon"
-                className="w-10 h-10 -mt-1 transition-transform duration-300 transform group-hover:scale-80"
-              />
-              <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
-                Youtube
-              </span>
-            </div>
-          </a>
-          <a
-            href="https://www.linkedin.com/in/daniel-l-a349a52a8/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-white transition"
-            aria-label="LinkedIn"
-          >
-            <div className="relative group">
-              <img
-                src={LinkedIn}
-                alt="LinkedIn-Icon"
-                className="w-10 h-10 -mt-1 transition-transform duration-300 transform group-hover:scale-80"
-              />
-              <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
-                LinkedIn
-              </span>
-            </div>
-          </a>
+          </div>
+        </div>
+
+        {/* Divider */}
+        <div className="border-t border-gray-800 pt-8">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm">
+            <p className="flex items-center gap-2">
+              © {currentYear} Daniel Linares Bernal. All rights reserved.
+            </p>
+            <p className="flex items-center gap-2 text-gray-500">
+              Crafted with
+              <Heart className="w-4 h-4 text-red-500" />
+              using React, Tailwind & GSAP
+            </p>
+          </div>
+        </div>
+
+        {/* Fun Quote */}
+        <div className="mt-8 p-4 bg-gray-900/50 border border-gray-800 rounded-lg text-center text-sm italic text-gray-500">
+          "Code is read much more often than it is written" - Guido van Rossum
         </div>
       </div>
     </footer>
