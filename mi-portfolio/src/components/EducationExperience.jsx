@@ -72,7 +72,7 @@ const EducationExperience = ({ isAppLoading }) => {
                         {t('educationTitle')} & {t('experienceTitle')}
                     </h2>
                     <p className={`${theme.textSecondary} text-lg break-words whitespace-normal`}>
-                        My academic background and professional journey
+                        {t('experienceSubTitle')}
                     </p>
                 </div>
 

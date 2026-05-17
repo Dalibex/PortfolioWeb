@@ -128,7 +128,7 @@ const Hero = ({ isAppLoading }) => {
                     </button>
                     <a
                         href="#contact"
-                        className={`px-8 py-4 border-2 ${theme.border} ${theme.text} font-bold rounded-lg hover:bg-white hover:bg-opacity-10 transition-all duration-300`}
+                        className={`px-8 py-4 border-2 ${theme.border} ${theme.text} font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transfrom hover:scale-105 active:scale-95`}
                     >
                         {t('heroContact')}
                     </a>

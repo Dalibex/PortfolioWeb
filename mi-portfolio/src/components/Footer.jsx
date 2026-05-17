@@ -103,7 +103,6 @@ const Footer = () => {
             </p>
             <p className={`flex items-center gap-2 ${theme.textMuted}`}>
               {t('footerCrafted')}
-              <Heart className="w-4 h-4 text-red-500" />
               {t('footerUsing')}
             </p>
           </div>
